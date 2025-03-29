@@ -1,11 +1,11 @@
 {
   "name": "mongo-demo",
   "version": "1.0.0",
-  "type":"module",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js && nodemon index.js",
+    "start": "nodemon index.js",
     "dev": "nodemon index.js",
     "build": "echo \"Error: no build specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "mongoose": "^5.13.23"
   },
   "devDependencies": {
