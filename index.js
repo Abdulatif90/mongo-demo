@@ -50,25 +50,44 @@ createBook();
 
 // kitonlarni bazadan olish
 
-async function getBooks() {
-    // bu kitoblarning hammasini olish uchun
-    // const books = await Book.find();
+// async function getBooks() {
+//     // bu kitoblarning hammasini olish uchun
+//     // const books = await Book.find();
 
-    //kitoblarni malum bir criterialar orqali olish
+//     //kitoblarni malum bir criterialar orqali olish
 
-    const books = await Book.find({
-        author: 'Abdulatif', 
-        isPublished: true  // bu author va isPublisher ga ko`ra kitoblarni olish
-    })
-        .limit(2) // faqat 2 donasini olish
-        .sort({name:1})  // 1 bu name oladi, 0 esa nameni qiymatini olmaydi
-        .select({name:1 , tags:1}) // name ni oladi lekin tags larni olmaydi. lekin tags ham qiymat berish orqali datalarni topish mumkin
+//     const books = await Book.find({
+//         author: 'Abdulatif', 
+//         isPublished: true  // bu author va isPublisher ga ko`ra kitoblarni olish
+//     })
+//         .limit(2) // faqat 2 donasini olish
+//         .sort({name:1})  // 1 bu name oladi, 0 esa nameni qiymatini olmaydi
+//         .select({name:1 , tags:1}) // name ni oladi lekin tags larni olmaydi. lekin tags ham qiymat berish orqali datalarni topish mumkin
 
-    console.log('olingan kitoblar',books);
-};
-    getBooks();
+//     console.log('olingan kitoblar',books);
+// };
+//     getBooks();
 
+// solishtirruv operatorlari: 
+    /* eq - (equal), ne-( no equal), gt (greater than), gte- great than or equal, lt - less than, 
+    Lte - less than or equal, in , nin - not in  --- bularni ishlatish ucun oldiga $ belgisi qoyiladi */ 
 
+    async function getBooks() {
+    
+        const books = await Book.find({price : {$gt : 10}}) // agar kitobni price bolsa 10 dan katta qiymatlarni filtlab olib beradi
+            // bir nechta shartlar ham yozish mumkin: $gt :10, $lt:20 - bu 10 dan katta 20 dan kichik
+            // $in : [10,20,30] bu esa kitob narxlari 10,20,30 larga teng bolgan narxli kitoblarni oladi
+            .or({author:'Abdulatif'},{isPublished:true}) // bu 2 ta argument oladi 2 shartdan biri true bolishi shart
+            .and({author:'Abdulatif'},{isPublished:true})// bu ikkila argument ham true bolganda ishlaydi
+            .limit(2) // faqat 2 donasini olish
+            .sort({name:1})  // 1 bu name oladi, 0 esa nameni qiymatini olmaydi
+            .select({name:1 , tags:1}) // name ni oladi lekin tags larni olmaydi. lekin tags ham qiymat berish orqali datalarni topish mumkin
+            .countDocuments(); // bu esa documentlar soni ni qaytaradi
+        console.log('olingan kitoblar',books);
+    };
+        getBooks();
+    
+    
 
 
 
