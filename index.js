@@ -32,14 +32,14 @@ const Book = mongoose.model("books",bookSchema);
 async function createBook() {
     try{
     const book = new Book ({
-    name: 'Working on MongoDb ',
+    name: 'working on Mongodb ',
     author: 'Abdulatif',
     tags: ['MongoDb', 'work '],
     isPublished: true
 });
 
 const savedBook = await book.save();
-console.log('Saqlangan kitob',savedBook);
+// console.log('Saqlangan kitob',savedBook);
 } 
 catch(err){
     console.log(err);
@@ -48,8 +48,25 @@ catch(err){
 
 createBook();
 
+// kitonlarni bazadan olish
 
+async function getBooks() {
+    // bu kitoblarning hammasini olish uchun
+    // const books = await Book.find();
 
+    //kitoblarni malum bir criterialar orqali olish
+
+    const books = await Book.find({
+        author: 'Abdulatif', 
+        isPublished: true  // bu author va isPublisher ga ko`ra kitoblarni olish
+    })
+        .limit(2) // faqat 2 donasini olish
+        .sort({name:1})  // 1 bu name oladi, 0 esa nameni qiymatini olmaydi
+        .select({name:1 , tags:1}) // name ni oladi lekin tags larni olmaydi. lekin tags ham qiymat berish orqali datalarni topish mumkin
+
+    console.log('olingan kitoblar',books);
+};
+    getBooks();
 
 
 
