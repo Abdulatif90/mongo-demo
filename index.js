@@ -13,6 +13,8 @@ mongoose.connect(process.env.MONGODB_URI,{
     console.error('MongoDB connection error:', err);
 });
 
+
+
 const SizeSchema = new mongoose.Schema({
     h: Number,
     w: Number,
@@ -29,9 +31,14 @@ const inventorySchema = new mongoose.Schema({
 const Inventory = mongoose.model('invertory', inventorySchema); // bu inventorySchema ga asoslanib intentory collection yaratiladi
 async function getInventoryItems(){
     return await Inventory
-    .find({status:'A'})
-    .sort({item : 1})
+    .find()
+    .or([
+            { qty: { $lte: 50 } },
+            { item: /.*l*./i } // bu yerda item ichida l harfi bor bo`lsa yoki qty 50 dan kam bo`lsa shularni chiqaradi
+    ])
+    .sort({qty : -1})  //  bu qty ni kamayish tartibida chiqaradi. agar qty: 1 bolsa, o`sish tartibida chiqaradi 
     .select({item: 1, qty: 1, _id: 0}) // bu 1 lar required hisoblaninb bu data olinishi kerak degan , 0 esa bizga olinishi shart emas
+    
 }
 
 
